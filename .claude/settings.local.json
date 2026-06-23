@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(npx expo *)",
+      "Bash(npx create-expo-app@latest *)",
+      "Bash(npm view *)",
+      "Bash(npx tsc *)",
+      "Bash(node *)",
+      "Bash(pkill -f \"expo start\")"
+    ]
+  }
+}
