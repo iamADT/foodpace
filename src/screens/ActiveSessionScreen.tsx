@@ -322,6 +322,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     paddingVertical: 24,
     paddingHorizontal: 24,
+    maxWidth: 480,
+    width: '100%',
+    alignSelf: 'center',
   },
   pausedBadge: {
     paddingVertical: 6,

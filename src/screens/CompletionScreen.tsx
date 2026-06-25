@@ -12,6 +12,7 @@ import { Confetti } from '../components/Confetti';
 import { ScreenGradient } from '../components/ScreenGradient';
 import { colors } from '../constants/colors';
 import { formatDurationWords } from '../constants/durations';
+import { useLayout } from '../hooks/useLayout';
 import { FullnessLevel, RootStackParamList } from '../types';
 import { saveLastMeal } from '../utils/sessionStore';
 
@@ -30,6 +31,7 @@ const FULLNESS_OPTIONS: { level: FullnessLevel; label: string; sub: string }[] =
 
 export function CompletionScreen({ navigation, route }: Props) {
   const { durationSeconds, elapsedSeconds, reason } = route.params;
+  const { vertPad } = useLayout();
   const [selected, setSelected] = useState<FullnessLevel | null>(null);
   const [reflected, setReflected] = useState(false);
 
@@ -56,7 +58,7 @@ export function CompletionScreen({ navigation, route }: Props) {
   return (
     <ScreenGradient>
       <SafeAreaView style={styles.safe}>
-        <View style={styles.container}>
+        <View style={[styles.container, { paddingVertical: vertPad }]}>
           {/* Completion message */}
           <View style={styles.header}>
             <View style={styles.iconMark}>
@@ -155,6 +157,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
     paddingVertical: 40,
     justifyContent: 'space-between',
+    maxWidth: 480,
+    width: '100%',
+    alignSelf: 'center',
   },
   header: { alignItems: 'center', gap: 12 },
   iconMark: {

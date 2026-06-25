@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { ScreenGradient } from '../components/ScreenGradient';
 import { colors } from '../constants/colors';
+import { useLayout } from '../hooks/useLayout';
 import { useSettings } from '../hooks/useSettings';
 import { RootStackParamList } from '../types';
 import { controlFeedback } from '../utils/feedback';
@@ -19,6 +20,7 @@ type Props = {
 
 export function PaceTrainerScreen({ navigation }: Props) {
   const { settings } = useSettings();
+  const { vertPad } = useLayout();
   const [bites, setBites] = useState(0);
   const startRef = useRef<number>(Date.now());
 
@@ -36,7 +38,7 @@ export function PaceTrainerScreen({ navigation }: Props) {
   return (
     <ScreenGradient>
       <SafeAreaView style={styles.safe}>
-        <View style={styles.container}>
+        <View style={[styles.container, { paddingTop: vertPad, paddingBottom: vertPad }]}>
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title} maxFontSizeMultiplier={1.4}>
@@ -95,6 +97,9 @@ const styles = StyleSheet.create({
     paddingTop: 48,
     paddingBottom: 36,
     alignItems: 'center',
+    maxWidth: 480,
+    width: '100%',
+    alignSelf: 'center',
   },
   header: { alignItems: 'center', gap: 8 },
   title: {

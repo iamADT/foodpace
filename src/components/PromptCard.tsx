@@ -78,6 +78,8 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
     paddingHorizontal: 24,
     marginHorizontal: 24,
+    alignSelf: 'center',
+    maxWidth: 480,
   },
   text: {
     color: colors.deepOlive,

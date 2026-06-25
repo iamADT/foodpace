@@ -12,6 +12,7 @@ import { Confetti } from '../components/Confetti';
 import { ScreenGradient } from '../components/ScreenGradient';
 import { colors } from '../constants/colors';
 import { formatDurationWords } from '../constants/durations';
+import { useLayout } from '../hooks/useLayout';
 import { RootStackParamList } from '../types';
 
 type Props = {
@@ -21,11 +22,12 @@ type Props = {
 
 export function TrainingCompleteScreen({ navigation, route }: Props) {
   const { bites, totalSeconds } = route.params;
+  const { vertPad } = useLayout();
 
   return (
     <ScreenGradient>
       <SafeAreaView style={styles.safe}>
-        <View style={styles.container}>
+        <View style={[styles.container, { paddingVertical: vertPad }]}>
           <View style={styles.header}>
             <View style={styles.iconMark}>
               <Text style={styles.iconMarkText}>✓</Text>
@@ -68,6 +70,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 28,
     paddingVertical: 40,
     justifyContent: 'space-between',
+    maxWidth: 480,
+    width: '100%',
+    alignSelf: 'center',
   },
   header: { alignItems: 'center', gap: 12, flex: 1, justifyContent: 'center' },
   iconMark: {

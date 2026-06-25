@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { Overlay } from '../components/Overlay';
-import { ScreenGradient } from '../components/ScreenGradient';
+import { StartBackground } from '../components/StartBackground';
 import { colors } from '../constants/colors';
 import {
   DEFAULT_DURATION,
@@ -76,7 +76,7 @@ export function StartScreen({ navigation }: Props) {
   };
 
   return (
-    <ScreenGradient>
+    <StartBackground>
       <SafeAreaView style={styles.safe}>
         <View style={styles.container}>
           <View style={styles.mainBlock}>
@@ -304,7 +304,7 @@ export function StartScreen({ navigation }: Props) {
           </TouchableOpacity>
         </View>
       </Overlay>
-    </ScreenGradient>
+    </StartBackground>
   );
 }
 
@@ -313,20 +313,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 28,
-    paddingTop: 56,
-    paddingBottom: 20,
+    paddingTop: 24,
+    paddingBottom: 12,
+    maxWidth: 480,
+    width: '100%',
+    alignSelf: 'center',
   },
   mainBlock: {
     flex: 1,
-    justifyContent: 'center',
-    gap: 72,
+    justifyContent: 'space-evenly',
   },
   settingsButton: {
     alignSelf: 'center',
     width: 52,
     height: 52,
     borderRadius: 26,
-    marginTop: 14,
+    marginTop: 8,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(255,255,255,0.4)',
@@ -416,7 +418,7 @@ const styles = StyleSheet.create({
   },
   startWrapper: {
     alignItems: 'center',
-    gap: 14,
+    gap: 10,
   },
   startButton: {
     backgroundColor: colors.clay,
@@ -440,7 +442,6 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   trainButton: {
-    marginTop: 6,
     paddingVertical: 12,
     paddingHorizontal: 28,
     borderRadius: 50,

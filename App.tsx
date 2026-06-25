@@ -2,7 +2,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { FlowingBackground } from './src/components/FlowingBackground';
 import { FlowProvider, useFlow } from './src/hooks/useFlow';
 import { SettingsProvider } from './src/hooks/useSettings';
@@ -46,26 +46,11 @@ function AppNavigator({ initialState }: { initialState?: any }) {
   );
 }
 
-/**
- * Web layout: the app-root gradient spans the whole viewport and the phone
- * frame is transparent on top of it, so the inside and outside are one
- * continuous background. The flow animates only while the timer screen is
- * focused (via the shared flow flag).
- */
 function WebShell({ children }: { children: React.ReactNode }) {
   const { flowing } = useFlow();
-  const { width, height } = useWindowDimensions();
-  const frameWidth = Math.floor(width / 3);
-  // Phone aspect ratio ~9:19.5 (iPhone); cap at 90% viewport height
-  const frameHeight = Math.min(Math.floor(frameWidth * (844 / 390)), height * 0.9);
-
   return (
     <FlowingBackground active={flowing}>
-      <View style={styles.center}>
-        <View style={[styles.phoneFrame, { width: frameWidth, height: frameHeight }]}>
-          {children}
-        </View>
-      </View>
+      {children}
     </FlowingBackground>
   );
 }
@@ -130,15 +115,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  phoneFrame: {
-    overflow: 'hidden',
-    borderRadius: 40,
-    backgroundColor: 'transparent',
-  },
-});
+const styles = StyleSheet.create({});
