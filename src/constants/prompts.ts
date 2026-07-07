@@ -1,3 +1,6 @@
+export const FIRST_PROMPT =
+  'Audio is welcome here - a podcast or music works well. Screens tend to pull focus from your meal, so it is worth setting those aside.';
+
 export const PROMPTS = [
   'Whenever it feels right, your cutlery can rest between bites.',
   'There is room for a slow breath before your next bite, if you would like one.',
@@ -39,5 +42,5 @@ export function shufflePrompts(): string[] {
     const j = Math.floor(Math.random() * (i + 1));
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
-  return copy;
+  return [FIRST_PROMPT, ...copy];
 }

@@ -3,6 +3,46 @@ import { TimeMode, TimerStatus } from '../types';
 
 const ACTIVE_KEY = '@foodpace:activeSession';
 const LAST_MEAL_KEY = '@foodpace:lastMeal';
+const HISTORY_KEY = '@foodpace:history';
+
+export interface MealSession {
+  id: string;
+  startedAt: number;
+  durationSeconds: number;
+  elapsedSeconds: number;
+  reason: 'complete' | 'early';
+  fullnessLevel?: 'hungry' | 'comfortable' | 'full' | 'overfull';
+}
+
+export async function saveSession(session: MealSession): Promise<void> {
+  try {
+    const existing = await loadSessions();
+    const updated = [session, ...existing];
+    await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify(updated));
+  } catch {
+    // best-effort
+  }
+}
+
+export async function loadSessions(): Promise<MealSession[]> {
+  try {
+    const raw = await AsyncStorage.getItem(HISTORY_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw) as MealSession[];
+  } catch {
+    return [];
+  }
+}
+
+export async function deleteSession(id: string): Promise<void> {
+  try {
+    const existing = await loadSessions();
+    const updated = existing.filter((s) => s.id !== id);
+    await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify(updated));
+  } catch {
+    // best-effort
+  }
+}
 
 export interface ActiveSession {
   durationSeconds: number;

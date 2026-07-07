@@ -29,7 +29,7 @@ export function TrainingCompleteScreen({ navigation, route }: Props) {
       <SafeAreaView style={styles.safe}>
         <View style={[styles.container, { paddingVertical: vertPad }]}>
           <View style={styles.header}>
-            <View style={styles.iconMark}>
+            <View style={styles.iconMark} accessible={false}>
               <Text style={styles.iconMarkText}>✓</Text>
             </View>
             <Text style={styles.headline} maxFontSizeMultiplier={1.4}>
@@ -50,10 +50,10 @@ export function TrainingCompleteScreen({ navigation, route }: Props) {
             onPress={() => navigation.navigate('Start')}
             activeOpacity={0.85}
             accessibilityRole="button"
-            accessibilityLabel="Done"
+            accessibilityLabel="Back to dashboard"
           >
             <Text style={styles.primaryButtonText} maxFontSizeMultiplier={1.4}>
-              Done
+              Back to dashboard
             </Text>
           </TouchableOpacity>
         </View>
@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
   detail: {
     fontSize: 14,
     color: colors.textMuted,
-    opacity: 0.8,
     textAlign: 'center',
   },
   primaryButton: {

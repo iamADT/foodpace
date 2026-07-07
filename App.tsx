@@ -8,7 +8,9 @@ import { FlowProvider, useFlow } from './src/hooks/useFlow';
 import { SettingsProvider } from './src/hooks/useSettings';
 import { ActiveSessionScreen } from './src/screens/ActiveSessionScreen';
 import { CompletionScreen } from './src/screens/CompletionScreen';
+import { HistoryScreen } from './src/screens/HistoryScreen';
 import { PaceTrainerScreen } from './src/screens/PaceTrainerScreen';
+import { PreSessionScreen } from './src/screens/PreSessionScreen';
 import { StartScreen } from './src/screens/StartScreen';
 import { TrainingCompleteScreen } from './src/screens/TrainingCompleteScreen';
 import { RootStackParamList, SessionResume } from './src/types';
@@ -39,6 +41,8 @@ function AppNavigator({ initialState }: { initialState?: any }) {
         <Stack.Screen name="Start" component={StartScreen} />
         <Stack.Screen name="Session" component={ActiveSessionScreen} />
         <Stack.Screen name="Completion" component={CompletionScreen} />
+        <Stack.Screen name="PreSession" component={PreSessionScreen} />
+        <Stack.Screen name="History" component={HistoryScreen} />
         <Stack.Screen name="PaceTrainer" component={PaceTrainerScreen} />
         <Stack.Screen name="TrainingComplete" component={TrainingCompleteScreen} />
       </Stack.Navigator>

@@ -9,7 +9,7 @@ export const colors = {
   ringGradient: ['#A9D8C2', '#A8CFE8'] as const,
 
   trackRing: 'rgba(38, 56, 45, 0.08)',
-  textMuted: 'rgba(38, 56, 45, 0.45)',
+  textMuted: 'rgba(38, 56, 45, 0.7)',
   cardBg: 'rgba(255, 255, 255, 0.55)',
   white: '#FFFFFF',
   overlay: 'rgba(20, 31, 26, 0.55)',

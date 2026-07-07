@@ -1,6 +1,5 @@
 export type TimerStatus = 'running' | 'paused' | 'complete';
 export type TimeMode = 'remaining' | 'elapsed';
-export type FullnessLevel = 'hungry' | 'comfortable' | 'full' | 'overfull';
 
 export interface TimerInit {
   status: Exclude<TimerStatus, 'complete'>;
@@ -22,6 +21,8 @@ export type RootStackParamList = {
     elapsedSeconds: number;
     reason: 'complete' | 'early';
   };
+  PreSession: { durationSeconds: number };
+  History: undefined;
   PaceTrainer: undefined;
   TrainingComplete: { bites: number; totalSeconds: number };
 };

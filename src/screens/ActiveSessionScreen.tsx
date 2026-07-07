@@ -145,12 +145,9 @@ export function ActiveSessionScreen({ navigation, route }: Props) {
     setShowEndDialog(true);
   };
 
-  const handleEndConfirm = (action: 'reflect' | 'continue' | 'end') => {
+  const handleEndConfirm = (action: 'continue' | 'end') => {
     setShowEndDialog(false);
-    if (action === 'reflect') {
-      complete();
-      goToCompletion('early', elapsed);
-    } else if (action === 'continue') {
+    if (action === 'continue') {
       if (isPaused || !isRunning) resume();
     } else {
       complete();
@@ -198,6 +195,7 @@ export function ActiveSessionScreen({ navigation, route }: Props) {
                   accessibilityRole="radio"
                   accessibilityState={{ selected: timeMode === 'remaining' }}
                   accessibilityLabel="Show time remaining"
+                  hitSlop={{ top: 10, bottom: 10, left: 4, right: 4 }}
                 >
                   <Text
                     style={[styles.timeModeTabText, timeMode === 'remaining' && styles.timeModeTabTextActive]}
@@ -213,6 +211,7 @@ export function ActiveSessionScreen({ navigation, route }: Props) {
                   accessibilityRole="radio"
                   accessibilityState={{ selected: timeMode === 'elapsed' }}
                   accessibilityLabel="Show time elapsed"
+                  hitSlop={{ top: 10, bottom: 10, left: 4, right: 4 }}
                 >
                   <Text
                     style={[styles.timeModeTabText, timeMode === 'elapsed' && styles.timeModeTabTextActive]}
@@ -283,29 +282,22 @@ export function ActiveSessionScreen({ navigation, route }: Props) {
           <View style={styles.modalActions}>
             <TouchableOpacity
               style={styles.modalPrimary}
-              onPress={() => handleEndConfirm('reflect')}
+              onPress={() => handleEndConfirm('continue')}
               activeOpacity={0.85}
               accessibilityRole="button"
+              accessibilityLabel="Continue timer"
             >
-              <Text style={styles.modalPrimaryText}>Reflect now</Text>
+              <Text style={styles.modalPrimaryText}>Continue timer</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.modalSecondary}
-              onPress={() => handleEndConfirm('continue')}
-              activeOpacity={0.8}
-              accessibilityRole="button"
-            >
-              <Text style={styles.modalSecondaryText}>Continue timer</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.modalTertiary}
               onPress={() => handleEndConfirm('end')}
               activeOpacity={0.8}
               accessibilityRole="button"
+              accessibilityLabel="End session"
             >
-              <Text style={styles.modalTertiaryText}>End session</Text>
+              <Text style={styles.modalSecondaryText}>End session</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -334,8 +326,7 @@ const styles = StyleSheet.create({
   },
   pausedText: {
     fontSize: 13,
-    color: colors.deepOlive,
-    opacity: 0.6,
+    color: colors.textMuted,
     letterSpacing: 0.5,
   },
   ringWrapper: {
@@ -423,7 +414,6 @@ const styles = StyleSheet.create({
     color: colors.deepOlive,
     fontSize: 17,
     fontWeight: '500',
-    opacity: 0.8,
   },
   // Modal
   modalCard: {
@@ -448,8 +438,7 @@ const styles = StyleSheet.create({
   },
   closeIcon: {
     fontSize: 20,
-    color: colors.deepOlive,
-    opacity: 0.55,
+    color: colors.textMuted,
     fontWeight: '500',
   },
   modalTitle: {
@@ -486,17 +475,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.deepOlive,
     fontWeight: '600',
-  },
-  modalTertiary: {
-    paddingVertical: 16,
-    borderRadius: 16,
-    borderWidth: 1.5,
-    borderColor: 'rgba(38,56,45,0.3)',
-    alignItems: 'center',
-  },
-  modalTertiaryText: {
-    fontSize: 16,
-    color: colors.deepOlive,
-    fontWeight: '500',
   },
 });

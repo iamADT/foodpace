@@ -78,6 +78,7 @@ export function PaceTrainerScreen({ navigation }: Props) {
             accessibilityRole="button"
             accessibilityLabel="Finish"
             style={styles.endButton}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             <Text style={styles.endText} maxFontSizeMultiplier={1.4}>
               Finish
@@ -110,8 +111,7 @@ const styles = StyleSheet.create({
   },
   intro: {
     fontSize: 16,
-    color: colors.deepOlive,
-    opacity: 0.7,
+    color: colors.textMuted,
     textAlign: 'center',
     lineHeight: 22,
   },
@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
   endText: {
     fontSize: 16,
     color: colors.deepOlive,
-    opacity: 0.7,
     fontWeight: '500',
     textDecorationLine: 'underline',
   },

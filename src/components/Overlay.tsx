@@ -35,12 +35,14 @@ export function Overlay({
         styles.root,
         align === 'bottom' ? styles.bottom : styles.center,
       ]}
+      accessibilityViewIsModal
     >
       <Pressable
         style={[StyleSheet.absoluteFill, styles.backdrop]}
         onPress={onRequestClose}
         accessibilityRole="button"
         accessibilityLabel="Dismiss"
+        importantForAccessibility="no-hide-descendants"
       />
       {children}
     </View>

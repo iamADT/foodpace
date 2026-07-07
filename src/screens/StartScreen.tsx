@@ -48,10 +48,9 @@ export function StartScreen({ navigation }: Props) {
     loadLastMeal().then(setLastMeal);
   }, []);
 
-  const handleStart = async () => {
-    unlockAudio(); // allow the gentle completion chime on web
-    await AsyncStorage.setItem(LAST_DURATION_KEY, String(selected));
-    navigation.navigate('Session', { durationSeconds: selected });
+  const handleStart = () => {
+    unlockAudio();
+    navigation.navigate('PreSession', { durationSeconds: selected });
   };
 
   const handleCustomConfirm = () => {
@@ -86,10 +85,14 @@ export function StartScreen({ navigation }: Props) {
               Foodpace
             </Text>
             <Text style={styles.tagline} maxFontSizeMultiplier={1.6}>
-              A calm timer for eating more slowly.
+              A calm timer for mindful eating.
             </Text>
             {lastMeal !== null && (
-              <Text style={styles.continuity} maxFontSizeMultiplier={1.6}>
+              <Text
+                style={styles.continuity}
+                maxFontSizeMultiplier={1.6}
+                accessibilityLiveRegion="polite"
+              >
                 Your last meal took {formatDurationWords(lastMeal)}.
               </Text>
             )}
@@ -97,62 +100,62 @@ export function StartScreen({ navigation }: Props) {
 
           {/* Duration picker */}
           <View style={styles.section}>
-            <Text style={styles.sectionLabel}>How long would you like?</Text>
-            <View style={styles.durationGrid}>
-              {PRESET_DURATIONS.map((d) => (
-                <TouchableOpacity
-                  key={d.seconds}
-                  style={[
-                    styles.durationChip,
-                    selected === d.seconds && styles.durationChipSelected,
-                  ]}
-                  onPress={() => setSelected(d.seconds)}
-                  activeOpacity={0.75}
-                  accessibilityRole="radio"
-                  accessibilityState={{ selected: selected === d.seconds }}
-                  accessibilityLabel={`${d.label} meal`}
-                >
-                  <Text
+            <Text style={styles.sectionLabel}>Select a duration for this meal</Text>
+            <View style={styles.radioGroup} accessibilityRole="radiogroup">
+              <View style={styles.durationGrid}>
+                {PRESET_DURATIONS.map((d) => (
+                  <TouchableOpacity
+                    key={d.seconds}
                     style={[
-                      styles.durationChipText,
-                      selected === d.seconds && styles.durationChipTextSelected,
+                      styles.durationChip,
+                      selected === d.seconds && styles.durationChipSelected,
                     ]}
-                    maxFontSizeMultiplier={1.4}
+                    onPress={() => setSelected(d.seconds)}
+                    activeOpacity={0.75}
+                    accessibilityRole="radio"
+                    accessibilityState={{ selected: selected === d.seconds }}
+                    accessibilityLabel={`${d.label} meal`}
                   >
-                    {d.label}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+                    <Text
+                      style={[
+                        styles.durationChipText,
+                        selected === d.seconds && styles.durationChipTextSelected,
+                      ]}
+                      maxFontSizeMultiplier={1.4}
+                    >
+                      {d.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
 
-            {/* Custom chip — its own line */}
-            <TouchableOpacity
-              style={[
-                styles.durationChip,
-                !PRESET_DURATIONS.some((d) => d.seconds === selected) &&
-                  styles.durationChipSelected,
-              ]}
-              onPress={() => setShowCustom(true)}
-              activeOpacity={0.75}
-              accessibilityRole="radio"
-              accessibilityState={{
-                selected: !PRESET_DURATIONS.some((d) => d.seconds === selected),
-              }}
-              accessibilityLabel="Custom duration"
-            >
-              <Text
+              {/* Custom chip */}
+              <TouchableOpacity
                 style={[
-                  styles.durationChipText,
+                  styles.durationChip,
                   !PRESET_DURATIONS.some((d) => d.seconds === selected) &&
-                    styles.durationChipTextSelected,
+                    styles.durationChipSelected,
                 ]}
-                maxFontSizeMultiplier={1.4}
+                onPress={() => setShowCustom(true)}
+                activeOpacity={0.75}
+                accessibilityRole="radio"
+                accessibilityState={{
+                  selected: !PRESET_DURATIONS.some((d) => d.seconds === selected),
+                }}
+                accessibilityLabel="Custom duration"
               >
-                {!PRESET_DURATIONS.some((d) => d.seconds === selected)
-                  ? selectedLabel()
-                  : 'Custom'}
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  style={[
+                    styles.durationChipText,
+                    !PRESET_DURATIONS.some((d) => d.seconds === selected) &&
+                      styles.durationChipTextSelected,
+                  ]}
+                  maxFontSizeMultiplier={1.4}
+                >
+                  Custom
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Start button */}
@@ -199,16 +202,27 @@ export function StartScreen({ navigation }: Props) {
             </Text>
           </TouchableOpacity>
 
-          {/* Settings — thumb-friendly, at the bottom */}
-          <TouchableOpacity
-            style={styles.settingsButton}
-            onPress={() => setShowSettings(true)}
-            activeOpacity={0.75}
-            accessibilityRole="button"
-            accessibilityLabel="Sound and haptics settings"
-          >
-            <Text style={styles.settingsIcon}>⚙</Text>
-          </TouchableOpacity>
+          {/* Icon buttons row */}
+          <View style={styles.iconRow}>
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() => navigation.navigate('History')}
+              activeOpacity={0.75}
+              accessibilityRole="button"
+              accessibilityLabel="Meal history"
+            >
+              <Text style={styles.iconButtonText}>⏱</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={() => setShowSettings(true)}
+              activeOpacity={0.75}
+              accessibilityRole="button"
+              accessibilityLabel="Sound and haptics settings"
+            >
+              <Text style={styles.iconButtonText}>⚙</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
 
@@ -237,15 +251,24 @@ export function StartScreen({ navigation }: Props) {
             keyboardType="number-pad"
             maxLength={2}
             autoFocus
+            accessibilityLabel="Custom duration in minutes"
+            accessibilityHint="Enter a number between 5 and 60"
           />
           {customError ? (
-            <Text style={styles.inputError}>{customError}</Text>
+            <Text
+              style={styles.inputError}
+              accessibilityLiveRegion="assertive"
+              accessibilityRole="text"
+            >
+              {customError}
+            </Text>
           ) : null}
           <TouchableOpacity
             style={styles.modalConfirm}
             onPress={handleCustomConfirm}
             activeOpacity={0.85}
             accessibilityRole="button"
+            accessibilityLabel="Set duration"
           >
             <Text style={styles.modalConfirmText}>Set duration</Text>
           </TouchableOpacity>
@@ -277,6 +300,7 @@ export function StartScreen({ navigation }: Props) {
               trackColor={{ false: 'rgba(38,56,45,0.18)', true: colors.mint }}
               thumbColor={colors.white}
               accessibilityLabel="Gentle sound"
+              accessibilityHint="A soft chime when your meal completes"
             />
           </View>
 
@@ -291,6 +315,7 @@ export function StartScreen({ navigation }: Props) {
               trackColor={{ false: 'rgba(38,56,45,0.18)', true: colors.mint }}
               thumbColor={colors.white}
               accessibilityLabel="Haptics"
+              accessibilityHint="A subtle buzz on prompts and completion"
             />
           </View>
 
@@ -299,11 +324,13 @@ export function StartScreen({ navigation }: Props) {
             onPress={() => setShowSettings(false)}
             activeOpacity={0.85}
             accessibilityRole="button"
+            accessibilityLabel="Done"
           >
             <Text style={styles.modalConfirmText}>Done</Text>
           </TouchableOpacity>
         </View>
       </Overlay>
+
     </StartBackground>
   );
 }
@@ -323,22 +350,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-evenly',
   },
-  settingsButton: {
-    alignSelf: 'center',
+  iconRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 12,
+    marginTop: 8,
+  },
+  iconButton: {
     width: 52,
     height: 52,
     borderRadius: 26,
-    marginTop: 8,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(255,255,255,0.4)',
     borderWidth: 1.5,
     borderColor: 'rgba(38,56,45,0.18)',
   },
-  settingsIcon: {
+  iconButtonText: {
     fontSize: 22,
     color: colors.deepOlive,
-    opacity: 0.7,
   },
   // Close button for overlay cards
   closeButton: {
@@ -354,8 +384,7 @@ const styles = StyleSheet.create({
   },
   closeIcon: {
     fontSize: 20,
-    color: colors.deepOlive,
-    opacity: 0.55,
+    color: colors.textMuted,
     fontWeight: '500',
   },
   header: { gap: 8, alignItems: 'center' },
@@ -375,8 +404,7 @@ const styles = StyleSheet.create({
   },
   continuity: {
     fontSize: 14,
-    color: colors.deepOlive,
-    opacity: 0.5,
+    color: colors.textMuted,
     textAlign: 'center',
     marginTop: 4,
     fontStyle: 'italic',
@@ -384,11 +412,14 @@ const styles = StyleSheet.create({
   section: { gap: 22, alignItems: 'center' },
   sectionLabel: {
     fontSize: 15,
-    color: colors.deepOlive,
+    color: colors.textMuted,
     fontWeight: '500',
-    opacity: 0.7,
     letterSpacing: 0.2,
     textAlign: 'center',
+  },
+  radioGroup: {
+    gap: 10,
+    alignItems: 'center',
   },
   durationGrid: {
     flexDirection: 'row',
@@ -397,7 +428,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   durationChip: {
-    paddingVertical: 12,
+    paddingVertical: 14,
     paddingHorizontal: 20,
     borderRadius: 50,
     borderWidth: 1.5,
@@ -456,13 +487,12 @@ const styles = StyleSheet.create({
   },
   footerLink: {
     alignSelf: 'center',
-    paddingVertical: 8,
+    paddingVertical: 14,
     paddingHorizontal: 12,
   },
   footerLinkText: {
     fontSize: 13,
-    color: colors.deepOlive,
-    opacity: 0.6,
+    color: colors.textMuted,
     textDecorationLine: 'underline',
   },
   // Modal
